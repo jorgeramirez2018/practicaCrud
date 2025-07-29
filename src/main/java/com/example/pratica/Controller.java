@@ -1,6 +1,5 @@
 package com.example.pratica;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,43 +7,38 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("practica")
+@RequestMapping("/usuarios")
+@CrossOrigin(origins = "*")
 public class Controller {
-
     private final Service service;
 
-    @Autowired
     public Controller(Service service) {
         this.service = service;
     }
-
     @GetMapping
-    public List<model> obternerDatos (){
-
-        return service.obtenerDatos();
+    public List<Model> obtenerDatos(){
+        return service.obtenerUsuarios();
     }
-
-    @GetMapping("/{id}")
-    public Optional<model> obtenerId(@PathVariable Long id){
+    @GetMapping("/obtener/{id}")
+    public Optional<Model> obtenerId(@PathVariable("id") Long id){
         return service.obtenerId(id);
     }
 
-    @PostMapping("agregando")
-    public  ResponseEntity<String> guardando(@RequestBody model guardar){
+    @PostMapping("/guardar")
+    public ResponseEntity<String> guardarDatos(@RequestBody Model guardar){
         service.guardarDatos(guardar);
-        return ResponseEntity.ok("Datos guardados Correctamente");
+        return ResponseEntity.ok("Se guardo con exito");
     }
 
-    @DeleteMapping("eliminando/{id}")
-    public  ResponseEntity<String> eliminando(@PathVariable Long id){
-        service.eliminarDatos(id);
-        return ResponseEntity.ok("Datos eliminados correctamente");
+    @DeleteMapping("/borrar/{id}")
+    public ResponseEntity<String> borrarDatos(@PathVariable("id") Long id){
+        service.borrarDatos(id);
+        return ResponseEntity.ok("Se elimino con exito");
     }
-
-    @PutMapping("actualizando/{id}")
-    public  ResponseEntity<String> actualizando(@PathVariable Long id, @RequestBody model actualizarDatos){
-        service.actualizarDatos(id,actualizarDatos);
-        return ResponseEntity.ok("Actualizando datos");
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<String> actualizarDatos(@PathVariable("id") Long id, @RequestBody Model actualizar ){
+        service.actualizarDatos(id,actualizar);
+        return ResponseEntity.ok("Se actualizo con exito");
     }
 
 }
